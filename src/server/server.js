@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Base URL for Strapi backend notes API
-const BASE_URL = "http://localhost:1337/api/notes";
+const BASE_URL = "https://keeper-backend-7i2s.onrender.com/api/notes";
 
 // =====================================
 // Function: getNotes

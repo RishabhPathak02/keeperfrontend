@@ -39,7 +39,7 @@ export default function App() {
             id={note.id}
             title={note.title}
             content={note.content}
-            handleDelete={handleDeleteNote}
+            onDelete={handleDeleteNote}
           />
         ))}
       </div>
