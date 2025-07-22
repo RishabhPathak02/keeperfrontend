@@ -1,25 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import Header from "./component/Header";
+import Footer from "./component/Footer";
+import CreateArea from "./component/CreateArea";
+import Note from "./component/Note";
+import { getNotes, addNote, deleteNote } from "./server/server";
+import "./App.css";
 
-function App() {
+export default function App() {
+  const [notes, setNotes] = useState([]);
+
+  useEffect(() => {
+    getNotes()
+      .then((fetched) => setNotes(fetched))
+      .catch((err) => console.error("Error loading notes:", err));
+  }, []);
+
+  const handleAddNote = (newNote) => {
+    addNote(newNote)
+      .then((savedNote) => setNotes((prev) => [...prev, savedNote]))
+      .catch((err) => console.error("Add error:", err));
+  };
+
+  const handleDeleteNote = (id) => {
+    deleteNote(id)
+      .then(() => setNotes((prev) => prev.filter((n) => n.id !== id)))
+      .catch((err) => console.error("Delete error:", err));
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app-container">
+      <Header />
+      <CreateArea onAdd={handleAddNote} />
+
+      <div className="notes-container">
+        {notes.map((note) => (
+          <Note
+            key={note.id}
+            id={note.id}
+            title={note.title}
+            content={note.content}
+            handleDelete={handleDeleteNote}
+          />
+        ))}
+      </div>
+
+      <Footer />
     </div>
   );
 }
-
-export default App;
